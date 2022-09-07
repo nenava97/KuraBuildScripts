@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Script 2 Nicole Navarrete 8/11/22
+#Build Script 2 Nicole Navarrete 8/11/22
 
 #This script asks the user if they would like to kill a process that exceeds memory usage of 512000Kb/500Mb or more
 
