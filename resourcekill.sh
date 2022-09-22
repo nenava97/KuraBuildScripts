@@ -35,6 +35,7 @@ do
 
 	if [ $ans != "y" ];
         then echo "$pid $cmd was NOT terminated.";
+		exit
         fi
 
 pid=$(ps -eo %mem,pid,cmd --sort=-%mem | sed -n 2p | awk '{ print $2}');
