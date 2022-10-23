@@ -1,6 +1,7 @@
 #!/bin/bash
+#Practicing for loop
 
-For i in $(cat ip_file.txt);
+for i in $(cat ip_file.txt);
  do ping -c 1 $i;
  
 done 
