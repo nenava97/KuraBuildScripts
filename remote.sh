@@ -1,38 +1,61 @@
 #!/bin/bash
 
-#Nicole Navarrete 9.12.22
+#Nicole Navarrete 10.23.22
 #This script practices scp & ssh by demonstrating remote login & file transfer functions
 #Note: User should know the password for remote user
-
+#Bug:assuming that user inputs are correct 
 #Provide a menu to user to select ssh (remote login) or scp (transfering files from remote systems)
-echo "Would you like to ssh or scp?"
+echo "Would you like to 1 ssh or 2 scp?"
 read ans
-ans=( $ans | tr '[:upper]''[:lower:]')
-echo $ans
 
-#Based on user selection ask for user name and ip-address.
-if $ans= 'ssh';
-then 
+#Based on user selection ask for user name and ip-address. Bug: script assumes that the key.pem to ssh in in the directory script is being run in
+if [ $ans = "1" ];
+  then
     echo "What's the username?"
     read usr
+    usr=$(echo $usr | tr '[[:upper:]]' '[[:lower:]]')      
     echo "What's the ip-address?"
     read ip
-    echo $ssh -i key.pem $usr@$ip 
-
+    ssh -i key.pem $usr@$ip
 #For scp ask user for direction of copy
-elif $ans= 'scp';
-then 
+elif [ $ans = "2" ];
+  then 
     echo "Moving files remote to local?"
     read res
-    res=( $res | tr '[:upper]''[:lower:]')
-#remote to local
-    if $res= 
+    res=$(echo $res | tr '[[:upper:]]' '[[:lower:]]')
 
-#local to remote.
-#copy file to destination home directory with same source file name.
-#Ask for source/destination file location. If no destination location is provided
-#If user gives destination along with filename, keep that as destination filename.
-#If user provides only destination location (no file name), keep as source file name
-else;
-echo "Come back when you are ready."
+#remote to local
+    if [ $res = "yes" ];
+
+#copy file to destination home directory with same source file name
+      then
+        echo "What is the remote username?"
+        read rem
+        echo "What is the remote IP address or host?"
+        read host
+        echo "What is the path to this remote file?"
+        read path
+        echo "What is the local path you'd like for this file to go?"
+        scp $rem@$host:$path $local
+      elif [ $res = "no" ]
+
+#local to remote
+        then echo "Moving files local to remote?"
+        read ment
+        ment=$(echo $ment | tr '[[:upper:]]' '[[:lower:]]')
+        if [ $ment = "yes" ];
+          then
+          echo "What is the file name?"
+          read file
+          echo "What is the remote username?"
+          read ru
+          echo "What is the remote path you'd like for this file to go?"
+          read rpath
+          scp $file $ru@$rip;$rpath
+        else echo "That is not a valid response, please try again when ready."
+        fi
+      else echo "That is not a valid response, please try again when ready."
+      fi
+else echo "That is not a valid response, please try again when ready."
 fi
+exit
