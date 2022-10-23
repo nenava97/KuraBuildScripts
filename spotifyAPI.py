@@ -7,18 +7,22 @@
 from operator import itemgetter
 import subprocess
 from typing import ItemsView
-subprocess.call('./spotifyAPI.sh')
-
-#Need to open the JSON and make as variable.
-import json
+subprocess.call('./spotifyAPI.sh') 
 _json = '/home/nicole/bin/KuraBuildScripts/playlist.json'
 
-#Create dictionary of variables of the information need from JSON.
-#Will get SyntaxError: invalid syntax
-df_dict = [{'song':['items'][0:36]['track']['name']; 'artist':["items"][0:36]["track"]["album"]["artists"][0:36]["name"]; 'album':["items"][0:36]["track"]["album"]["name"]; 'release':["items"][0:36]["track"]["album"]["release_date"]; 'exp':["items"][0:36]["track"]["explicit"]; 'pop':["items"][0:36]["track"]["popularity"]} for item in _json]
+#Need to open the JSON and make into variable.
+import json
+import pandas as pd
+from pandas.io.json import json_normalize
 
-#Create dataframe that will use to parse JSON file.
-extracted_df = pd.DataFrame(df_dict)
+with open('playlist.json') as f:
+   d = json.load(f)
+
+#Create dataframe of json using pandas 
+df = pd.json_normalize(data= d['items'],record_path=["track","artists"],meta=[["track","name"],["track","explicit"],["track","popularity"],["track","album","name"],["track","album","release_date"]],errors='ignore',record_prefix='_')
+
+#Update dataframe by choosing specific columns
+df = df[['_name', 'track.name', 'track.explicit', 'track.popularity', 'track.album.name', 'track.album.release_date']]
 
 #Convert the dataframe of information to CSV with headers appointed
-extracted_df.to_csv("./playlist.csv")
+df.to_csv("./playlist.csv")
